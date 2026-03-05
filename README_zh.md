@@ -959,3 +959,35 @@ swanlab_run_name: test_run # 可选
 ## Star History
 
 ![Star History Chart](https://api.star-history.com/svg?repos=hiyouga/LLaMA-Factory&type=Date)
+
+# 1. 创建项目目录
+mkdir ~/Qwen-Law
+cd ~/Qwen-Law
+
+# 2. 从 GitHub 克隆代码
+git clone https://github.com/Bwang8/Qwen-Law.git .
+
+# 3. 安装 modelscope
+pip install modelscope
+
+# 4. 下载你的 LoRA 权重
+modelscope download winasfdadf/Qwen-Law-LoRA --local_dir ./saves/qwen3-4b/lora/sft
+
+# 5. 下载基座模型
+modelscope download Qwen/Qwen2.5-3B --local_dir ./qwen2.5-3b
+```
+
+---
+
+### 📋 恢复后的目录结构
+```
+Qwen-Law/
+├── saves/
+│   └── qwen3-4b/
+│       └── lora/
+│           └── sft/           ← LoRA 权重（从 ModelScope 下载）
+├── qwen2.5-3b/                ← 基座模型（从 ModelScope 下载）
+├── data/                      ← 数据集
+├── examples/                  ← 配置示例
+├── src/                       ← 源代码
+└── README.md
