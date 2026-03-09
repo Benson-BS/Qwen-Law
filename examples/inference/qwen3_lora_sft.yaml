@@ -1,5 +1,9 @@
-model_name_or_path: /root/autodl-tmp/LLaMA-Factory/qwen2.5-3b
-adapter_name_or_path: saves/qwen3-4b/lora/sft
+model_name_or_path: /root/autodl-tmp/Qwen-Law/qwen2.5-3b
+adapter_name_or_path: saves/qwen3-4b/lora/sft/checkpoint-1500
 template: qwen3_nothink
-infer_backend: huggingface  # choices: [huggingface, vllm, sglang, ktransformers]
+infer_backend: huggingface
 trust_remote_code: true
+repetition_penalty: 1.2
+temperature: 0.7
+top_p: 0.9
+max_new_tokens: 512

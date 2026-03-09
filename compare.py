@@ -19,7 +19,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 
 BASE_MODEL_PATH = "./qwen2.5-3b"
-LORA_ADAPTER_PATH = "./saves/qwen3-4b/lora/sft"
+LORA_ADAPTER_PATH = "./saves/qwen3-4b/lora/sft/checkpoint-1500"
 OUTPUT_DIR = Path("./results")
 
 LEGAL_QUESTIONS = [
@@ -37,7 +37,7 @@ GENERATION_CONFIG = dict(
     max_new_tokens=512,
     temperature=0.7,
     top_p=0.9,
-    repetition_penalty=1.1,
+    repetition_penalty=1.4,
     do_sample=True,
 )
 
@@ -63,7 +63,8 @@ def load_lora_model(base_model, adapter_path: str):
     print(f"[INFO] Loading LoRA adapter from {adapter_path} ...")
     lora_model = PeftModel.from_pretrained(base_model, adapter_path)
     lora_model.eval()
-    return lora_model
+    lora_tokenizer = AutoTokenizer.from_pretrained(adapter_path, trust_remote_code=True)
+    return lora_model, lora_tokenizer
 
 
 # ---------------------------------------------------------------------------
@@ -264,13 +265,13 @@ def run_comparison():
         base_results.append((answer, elapsed))
         print(f"    done in {elapsed:.1f}s ({len(answer)} chars)")
 
-    lora_model = load_lora_model(base_model, LORA_ADAPTER_PATH)
+    lora_model, lora_tokenizer = load_lora_model(base_model, LORA_ADAPTER_PATH)
 
     print("\n[INFO] Generating LoRA fine-tuned model answers ...")
     lora_results = []
     for i, q in enumerate(LEGAL_QUESTIONS, 1):
         print(f"  LoRA model - question {i}/{len(LEGAL_QUESTIONS)} ...")
-        answer, elapsed = generate(lora_model, tokenizer, q)
+        answer, elapsed = generate(lora_model, lora_tokenizer, q)
         lora_results.append((answer, elapsed))
         print(f"    done in {elapsed:.1f}s ({len(answer)} chars)")
 
